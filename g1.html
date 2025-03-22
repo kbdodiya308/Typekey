@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Typing Storm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #fff;
+            text-align: center;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #000428, #004e92);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .word {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #818cf8;
+            text-shadow: 0 0 10px #818cf8;
+            animation: fall 10s linear forwards;
+        }
+
+        @keyframes fall {
+            from { top: -50px; }
+            to { top: 100%; }
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #818cf8;
+            display: flex;
+            gap: 20px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+        }
+
+        .input-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #818cf8;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: #818cf8;
+            font-size: 20px;
+            padding: 10px;
+            border-bottom: 2px solid #818cf8;
+            outline: none;
+            text-transform: uppercase;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #ff00ff;
+            display: none;
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #818cf8, #2d2f8f);
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .life {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            margin: 0 5px;
+            box-shadow: 0 0 10px #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="stats">
+            Score: <span id="score">0</span> |
+            Lives: <span id="lives"></span>
+        </div>
+        <div class="input-container">
+            <input type="text" id="input" autofocus onfocus="this.value='';">
+        </div>
+        <div class="game-over" id="gameOver">
+            <h2>GAME OVER</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button class="restart-btn" onclick="startGame()">Restart</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let lives = 3;
+        let activeWords = [];
+        let wordPool = [];
+        let gameInterval;
+
+        function generateWordPool() {
+            wordPool = [];
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let i = 0; i < 1000; i++) {
+                const length = Math.floor(Math.random() * 4) + 1;
+                let word = '';
+                for (let j = 0; j < length; j++) {
+                    word += chars[Math.floor(Math.random() * chars.length)];
+                }
+                wordPool.push(word);
+            }
+        }
+
+        function createWord() {
+            if (wordPool.length === 0) generateWordPool();
+
+            const word = document.createElement('div');
+            const text = wordPool.pop();
+            word.className = 'word';
+            word.textContent = text;
+            word.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            word.style.animationDuration = Math.random() * 6 + 10 + 's';
+
+            document.querySelector('.game-container').appendChild(word);
+
+            activeWords.push({ element: word, text: text });
+
+            word.addEventListener('animationend', () => {
+                loseLife();
+                word.remove();
+                activeWords = activeWords.filter(w => w.element !== word);
+            });
+        }
+
+        function updateLives() {
+            const livesContainer = document.getElementById('lives');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                let life = document.createElement('div');
+                life.className = 'life';
+                livesContainer.appendChild(life);
+            }
+        }
+
+        function loseLife() {
+            lives--;
+            updateLives();
+            if (lives <= 0) {
+                gameOver();
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('input').disabled = true;
+        }
+
+        function startGame() {
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('input').disabled = false;
+            document.getElementById('input').value = '';
+            document.querySelectorAll('.word').forEach(word => word.remove());
+
+            score = 0;
+            lives = 3;
+            activeWords = [];
+            generateWordPool();
+            updateLives();
+            document.getElementById('score').textContent = score;
+
+            clearInterval(gameInterval);
+            gameInterval = setInterval(createWord, 2500);
+        }
+
+        document.addEventListener("keyup", function () {
+            const typedWord = document.getElementById("input").value.toUpperCase();
+            let matched = activeWords.find(w => w.text === typedWord);
+            if (matched) {
+                matched.element.remove();
+                activeWords = activeWords.filter(w => w !== matched);
+                score += 10;
+                document.getElementById('score').textContent = score;
+                document.getElementById("input").value = '';
+            }
+        });
+
+        generateWordPool();
+        updateLives();
+        gameInterval = setInterval(createWord, 2500);
+    </script>
+
+<!-- AdMob Banner Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-app-pub-1213031415810731/5052702467"
+     data-ad-slot="XXXXXXXXXX"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</body>
+</html>

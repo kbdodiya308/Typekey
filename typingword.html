@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeKey - Master Your Typing Skills</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #fff;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem 5%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #818cf8;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 120px auto 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #818cf8, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #word-display {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        #typing-input {
+            width: 90%;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #a8c0ff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            outline: none;
+            background: #1e293b;
+            color: white;
+            text-align: center;
+        }
+
+        #typing-input.error {
+            border-color: red;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            background: linear-gradient(to right, #6a82fb, #fc5c7d);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #counts, #results {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">TypeKey</a>
+    </nav>
+
+    <div class="container">
+        <h1>Typing Speed Test</h1>
+        <p id="word-display">Loading words...</p>
+        <input type="text" id="typing-input" autofocus>
+        <p id="counts">Words: 0, Characters: 0</p>
+        <div id="results"></div>
+        <button onclick="restartGame()">Restart</button>
+    </div>
+
+    <script>
+        // 1000+ Random Words
+        const words = [
+            "hello", "world", "javascript", "typing", "practice", "code", "developer", "keyboard", "programming",
+            "innovation", "technology", "accuracy", "speed", "success", "learning", "knowledge", "challenge", "focus",
+            "python", "react", "html", "css", "angular", "framework", "library", "algorithm", "software", "hardware",
+            "function", "variable", "parameter", "object", "array", "string", "integer", "boolean", "class", "inheritance",
+            "database", "server", "network", "security", "encryption", "authentication", "frontend", "backend", "fullstack",
+            "optimization", "debugging", "testing", "deployment", "scalability", "architecture", "automation", "machine",
+            "learning", "artificial", "intelligence", "neural", "dataset", "training", "validation", "regression", "clustering",
+            "classification", "prediction", "analysis", "visualization", "efficiency", "performance", "usability",
+            "accessibility", "interface", "experience", "responsive", "mobile", "desktop", "tablet", "design", "user", "navigation",
+            "interaction", "database", "indexing", "query", "schema", "relation", "transaction", "cache", "thread", "process",
+            "parallel", "cloud", "storage", "serverless", "authentication", "encryption", "firewall", "security", "malware",
+            "phishing", "hacking", "penetration", "audit", "compliance", "monitoring", "performance", "scalability",
+            "microservices", "container", "docker", "kubernetes", "virtualization", "networking", "protocol", "latency",
+            "throughput", "bandwidth", "routing", "switching", "load", "balancer", "proxy", "gateway", "edge", "server",
+            "dns", "tcp", "udp", "api", "endpoint", "request", "response", "json", "xml", "rest", "graphql", "oauth",
+            "token", "authorization", "authentication", "session", "cookie", "cache", "compression", "minification",
+            "cdn", "content", "delivery", "websocket", "event", "listener", "async", "await", "callback", "promise",
+            "threading", "concurrency", "parallelism", "deadlock", "race", "condition", "synchronization", "mutex",
+            "semaphore", "lock", "monitor", "garbage", "collection", "heap", "stack", "overflow", "buffer", "memory",
+            "allocation", "pointer", "reference", "dereference", "linked", "list", "binary", "tree", "graph", "search",
+            "traversal", "sorting", "bubble", "merge", "quick", "selection", "insertion", "heap", "hash", "table",
+            "set", "map", "dictionary", "serialization", "deserialization", "stream", "file", "input", "output",
+            "keyboard", "mouse", "monitor", "display", "resolution", "dpi", "pixel", "frame", "rate", "animation",
+            "rendering", "shader", "graphics", "gpu", "cpu", "clock", "speed", "benchmark", "performance", "optimization",
+            "database", "sql", "nosql", "mongodb", "postgres", "mysql", "sqlite", "query", "indexing", "sharding",
+            "replication", "backup", "restore", "transaction", "acidity", "integrity", "constraint", "foreign", "primary"
+        ];
+
+        let wordIndex = 0;
+        let correctWords = 0;
+        let totalCharacters = 0;
+
+        const wordDisplay = document.getElementById("word-display");
+        const typingInput = document.getElementById("typing-input");
+        const countsText = document.getElementById("counts");
+        const resultsDiv = document.getElementById("results");
+
+        function loadWord() {
+            wordIndex = Math.floor(Math.random() * words.length);
+            wordDisplay.textContent = words[wordIndex];
+        }
+
+        function checkInput(event) {
+            const typedWord = typingInput.value.trim();
+
+            if (event.key !== "Enter") {
+                totalCharacters++;
+            }
+
+            if (event.key === "Enter" && typedWord === words[wordIndex]) {
+                correctWords++;
+                typingInput.value = "";
+                typingInput.classList.remove("error");
+                loadWord();
+            } else if (words[wordIndex].startsWith(typedWord)) {
+                typingInput.classList.remove("error");
+            } else {
+                typingInput.classList.add("error");
+            }
+
+            updateCounts();
+        }
+
+        function updateCounts() {
+            countsText.textContent = `Words: ${correctWords}, Characters: ${totalCharacters}`;
+        }
+
+        function restartGame() {
+            correctWords = 0;
+            totalCharacters = 0;
+            typingInput.value = "";
+            typingInput.classList.remove("error");
+            loadWord();
+            countsText.textContent = "Words: 0, Characters: 0";
+            resultsDiv.innerHTML = "";
+        }
+
+        typingInput.addEventListener("keyup", checkInput);
+        loadWord();
+    </script>
+
+<!-- AdMob Banner Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-app-pub-1213031415810731/5052702467"
+     data-ad-slot="XXXXXXXXXX"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</body>
+</html>
+

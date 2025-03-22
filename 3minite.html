@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Test - TypeKey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .typing-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .paragraph-box {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: justify;
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            user-select: none; /* Prevents text selection */
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #facc15;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-size: 1.2rem;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            resize: none;
+            background: #1e293b;
+            color: #fff;
+        }
+
+        .result {
+            font-size: 1.3rem;
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #6366f1;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="typing-container animate__animated animate__fadeIn">
+        <h2>3-Minute Typing Test</h2>
+        <p class="paragraph-box" id="paragraph"></p>
+        <p class="timer" id="timer">180</p>
+        <textarea id="typingArea" placeholder="Start typing here..." autofocus></textarea>
+        <p class="result" id="result"></p>
+        <button class="btn" onclick="restartTest()">Try Again</button>
+    </div>
+
+    <script>
+        const paragraphs = [
+            "Typing is a fundamental skill in the modern world. Mastering it can increase productivity significantly. People who type faster can complete tasks more efficiently. Many jobs require excellent typing skills. Speed and accuracy are both essential for effective typing. The key to improving typing speed is practice. Daily exercises help develop muscle memory. Touch typing allows you to type without looking at the keyboard. It reduces strain on the hands and eyes. Proper hand positioning is crucial for efficient typing. A relaxed posture prevents discomfort during long typing sessions. Taking short breaks can improve focus. Typing games make learning more engaging. Many online platforms offer typing challenges. These challenges help build speed and accuracy over time. Setting personal goals can keep motivation high. Typing tests measure progress and highlight areas for improvement. Reading aloud while typing can enhance coordination. Using all fingers instead of just two can boost speed. Practicing with different types of texts enhances adaptability. A variety of exercises prevents boredom. Listening to music while typing can sometimes improve concentration. However, distractions should be minimized for better results. Many professionals rely on fast typing for their work. Writers, programmers, and data entry specialists all benefit from efficient typing. Schools should emphasize typing skills from an early age. Learning to type correctly prevents bad habits. Relearning proper techniques can be challenging. However, consistent effort leads to significant improvement. A well-designed keyboard can enhance comfort. Mechanical keyboards are preferred by many professionals. Ergonomic keyboards reduce strain and improve typing speed. Backlit keyboards help in low-light conditions. Typing speed varies from person to person. Some people naturally type faster than others. However, everyone can improve with practice. The world's fastest typists reach speeds of over 200 words per minute. While this may seem impossible, gradual progress leads to impressive results. The average typing speed is around 40 words per minute. Aiming for 60 words per minute is a good goal. Accuracy should not be sacrificed for speed. Correcting mistakes takes time and slows down progress. Typing exercises should focus on both speed and accuracy. Professional typists use shortcuts to save time. Learning common shortcuts improves efficiency. Keyboard layout also affects typing speed. The QWERTY layout is the most common. However, alternative layouts like Dvorak and Colemak exist. Some people find them more comfortable. Ultimately, the best layout is the one that suits the individual. Typing tests can be fun and rewarding. They track progress and encourage improvement. With consistent effort, anyone can become a fast and accurate typist."
+        ];
+
+        let timeLeft = 180;
+        let timerStarted = false;
+        let interval;
+        let selectedParagraph = "";
+        let wordCount = 0;
+        let correctWords = 0;
+
+        function startTimer() {
+            if (timerStarted) return;
+            timerStarted = true;
+            interval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+                if (timeLeft === 0) {
+                    clearInterval(interval);
+                    endTest();
+                }
+            }, 1000);
+        }
+
+        function getRandomParagraph() {
+            return paragraphs[Math.floor(Math.random() * paragraphs.length)];
+        }
+
+        function startTest() {
+            selectedParagraph = getRandomParagraph();
+            document.getElementById("paragraph").innerText = selectedParagraph;
+            document.getElementById("typingArea").value = "";
+            document.getElementById("timer").innerText = "180";
+            document.getElementById("result").innerText = "";
+            timeLeft = 180;
+            timerStarted = false;
+            wordCount = 0;
+            correctWords = 0;
+            clearInterval(interval);
+        }
+
+        function endTest() {
+            let typedText = document.getElementById("typingArea").value.trim();
+            let typedWords = typedText.split(/\s+/);
+            let originalWords = selectedParagraph.split(/\s+/);
+            wordCount = typedWords.length;
+            
+            // Count correct words
+            typedWords.forEach((word, index) => {
+                if (word === originalWords[index]) correctWords++;
+            });
+
+            let accuracy = correctWords / wordCount * 100 || 0;
+            document.getElementById("result").innerHTML = `Speed: <strong>${wordCount} WPM</strong> | Accuracy: <strong>${accuracy.toFixed(2)}%</strong>`;
+        }
+
+        function restartTest() {
+            startTest();
+        }
+
+        document.getElementById("typingArea").addEventListener("input", startTimer);
+        window.onload = startTest;
+
+        // Prevent right-click and copy-paste
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('copy', event => event.preventDefault());
+    </script>
+
+
+<!-- AdMob Banner Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-app-pub-1213031415810731/5052702467"
+     data-ad-slot="XXXXXXXXXX"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</body>
+</html>
+
