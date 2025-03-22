@@ -1,1 +1,223 @@
 # Typekey
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeKey - Master Your Typing Skills</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Improve your typing speed and accuracy with TypeKey. Take real-time typing tests, track your progress, and boost your keyboard skills.">
+    <meta name="keywords" content="typing test, type speed, online typing, touch typing, improve typing, free typing practice">
+    <meta name="author" content="TypeKey Team">
+    
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="TypeKey - Master Your Typing Skills">
+    <meta property="og:description" content="Improve your typing speed and accuracy with TypeKey.">
+    <meta property="og:image" content="https://example.com/typekey-banner.jpg">
+    <meta property="og:url" content="https://example.com">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Styles & Animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 5%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #818cf8;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-block;
+            background: #6366f1;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #818cf8, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            padding: 5rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer {
+            background: #1e293b;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">TypeKey</a>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contect.html">Contact Us</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content animate__animated animate__fadeIn">
+            <h1>Unlock Your Typing Potential</h1>
+            <p>Master your keyboard skills with our interactive typing tests, real-time analytics, and personalized training programs.</p>
+            <a href="afterlogin.html" class="btn">Start Typing Test</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card animate__animated animate__fadeInUp">
+            <h3>Real-time Typing Tests</h3>
+            <p>Measure your typing speed and accuracy with various test modes including timed tests, paragraph typing, and code typing.</p>
+        </div>
+        <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <h3>Progress Tracking</h3>
+            <p>Detailed statistics and progress reports to help you identify weaknesses and track your improvement over time.</p>
+        </div>
+        <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+            <h3>Multi-language Support</h3>
+            <p>Practice typing in multiple languages including English, Spanish, French, and programming languages.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        &copy; <span id="year"></span> TypeKey. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Scroll animation trigger
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.feature-card').forEach(feature => {
+                if (feature.getBoundingClientRect().top < window.innerHeight - 100) {
+                    feature.style.opacity = '1';
+                    feature.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Set current year in copyright
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+
+<!-- AdMob Banner Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-app-pub-1213031415810731/5052702467"
+     data-ad-slot="XXXXXXXXXX"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</body>
+</html>
